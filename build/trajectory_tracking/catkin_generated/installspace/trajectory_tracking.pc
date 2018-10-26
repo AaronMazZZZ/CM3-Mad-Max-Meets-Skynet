@@ -1,0 +1,8 @@
+prefix=/home/aaron/racecar_ws4.1/install
+
+Name: trajectory_tracking
+Description: Description of trajectory_tracking
+Version: 0.0.0
+Cflags: -I/home/aaron/racecar_ws4.1/install/include
+Libs: -L/home/aaron/racecar_ws4.1/install/lib 
+Requires: 
