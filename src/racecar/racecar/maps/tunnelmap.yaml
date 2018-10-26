@@ -1,0 +1,7 @@
+image: /home/aaron/racecar_ws4.1/src/racecar/racecar/maps/tunnelmap.pgm
+resolution: 0.030000
+origin: [-58.744152, -4.765508, 0.000000]
+negate: 0
+occupied_thresh: 0.65
+free_thresh: 0.196
+
