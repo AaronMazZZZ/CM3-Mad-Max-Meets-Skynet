@@ -1,0 +1,2 @@
+ackermann_msgs:amcl:global_planner:map_server:move_base:open_karto:racecar-simulator/racecar_control:racecar-simulator/racecar_description:racecar-simulator/racecar_gazebo:racecar/ackermann_cmd_mux:racecar/racecar:racecarDepth:racecar_local_planner:slam_karto:trajectory_tracking
+-DCATKIN_DEVEL_PREFIX=/home/aaron/racecar_ws4.1/devel -DCMAKE_INSTALL_PREFIX=/home/aaron/racecar_ws4.1/install -G Unix Makefiles
