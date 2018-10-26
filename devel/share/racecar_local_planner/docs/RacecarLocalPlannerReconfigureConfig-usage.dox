@@ -1,0 +1,15 @@
+\subsubsection usage Usage
+\verbatim
+<node name="racecar_local_planner" pkg="racecar_local_planner" type="racecar_local_planner">
+  <param name="linear_kp" type="double" value="0.2" />
+  <param name="linear_ki" type="double" value="1.905" />
+  <param name="linear_kd" type="double" value="0.0" />
+  <param name="angular_kp" type="double" value="0.6" />
+  <param name="angular_ki" type="double" value="1.25" />
+  <param name="angular_kd" type="double" value="0.0" />
+  <param name="goal_tolerance" type="double" value="0.5" />
+  <param name="max_linear_velocity" type="double" value="0.3" />
+  <param name="max_angular_velocity" type="double" value="0.6" />
+</node>
+\endverbatim
+
