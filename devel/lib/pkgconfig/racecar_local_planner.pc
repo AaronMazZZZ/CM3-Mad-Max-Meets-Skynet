@@ -1,0 +1,8 @@
+prefix=/home/aaron/racecar_ws4.1/devel
+
+Name: racecar_local_planner
+Description: Description of racecar_local_planner
+Version: 0.0.0
+Cflags: -I/home/aaron/racecar_ws4.1/devel/include -I/home/aaron/racecar_ws4.1/src/racecar_local_planner/include
+Libs: -L/home/aaron/racecar_ws4.1/devel/lib -lracecar_local_planer
+Requires: pluginlib
