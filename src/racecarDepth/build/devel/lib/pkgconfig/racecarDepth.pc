@@ -1,0 +1,8 @@
+prefix=/home/vcciv/catkin_ws/src/racecarDepth/build/devel
+
+Name: racecarDepth
+Description: Description of racecarDepth
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/vcciv/catkin_ws/src/racecarDepth/build/devel/lib 
+Requires: 
