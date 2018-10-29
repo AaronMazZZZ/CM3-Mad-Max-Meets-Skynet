@@ -1,3 +1,6 @@
+//version1 depthEst.cpp
+//This one is just a test file. It does not work well. Please use 'depthEst2.cpp'.
+//@author Guanghui Ma
 #include <ros/ros.h>
 #include <iostream>
 #include <math.h>
@@ -5,7 +8,7 @@
 #include <sensor_msgs/point_cloud_conversion.h>
 #include <sensor_msgs/Image.h>
 #include <sensor_msgs/image_encodings.h>
-#include "racecarDepth/ObsPose.h" //自定义消息
+#include "racecarDepth/ObsPose.h" 
 #include <cv_bridge/cv_bridge.h>
 #include <image_transport/image_transport.h>
 #include <opencv2/opencv.hpp>
@@ -13,38 +16,23 @@
 // PCL
 #include <pcl/point_types.h>
 #include <pcl_conversions/pcl_conversions.h> 
-#include <pcl/visualization/pcl_visualizer.h> //可视化
-//根据点云的有序性，直接找到图像的三维坐标。
-//ObsPose消息输出内容：
-/*
-std_msgs/Header header
-  uint32 seq
-  time stamp
-  string frame_id
-float32[] x
-float32[] y
-float32[] dist
-float32[] angle
-//----输出说明------
-(x,y)是障碍物小车在车体坐标系下的位置，x坐标轴向右，y坐标轴向前
-dist是障碍物小车距离本车的距离
-angle是角度
-发布出来的四个值都是数组，因为考虑到以后可能会出现一个画面中有多个小车的情况。
-*/
+#include <pcl/visualization/pcl_visualizer.h> 
+
+
 typedef pcl::PointXYZ PointT;
 typedef pcl::PointCloud<PointT> PointCloud;
 
 using namespace std;
-//
+
 const cv::Mat Matrix = (cv::Mat_<double>(3, 3) << 501.9406, 0.0, 330.2514, 0.0, 502.2422, 234.5579, 0.0, 0.0, 1.0);
-const cv::Mat coefficients = (cv::Mat_<double>(5, 1) << 0.0266, -0.0613, 0.0, 0.0, -0.0015);//相机内参标定
+const cv::Mat coefficients = (cv::Mat_<double>(5, 1) << 0.0266, -0.0613, 0.0, 0.0, -0.0015);
 cv::Point curpoint;
 bool bObsOK = 0;
 ros::Publisher obsdepth_pub;
-// 声明
+
 void rgb_callback(const sensor_msgs::ImageConstPtr &msg );
 void points_callback(const sensor_msgs::PointCloud2ConstPtr &msg);
-double colorfilter(cv::Mat picture);//滤颜色
+double colorfilter(cv::Mat picture);
 
 int main(int argc, char **argv)
 {
@@ -81,12 +69,12 @@ void rgb_callback(const sensor_msgs::ImageConstPtr &msg )
         return;
     }
     cv::Mat pic = frame.clone();
-    //识别位置
+
     colorfilter(frame);
-    cvtColor(frame, frame, CV_BGR2GRAY);//灰度
-    threshold(frame, frame, 10, 255, CV_THRESH_BINARY);//二值化
+    cvtColor(frame, frame, CV_BGR2GRAY);
+    threshold(frame, frame, 10, 255, CV_THRESH_BINARY);
     vector<vector<cv::Point>> contours;
-    findContours(frame, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);//求轮廓
+    findContours(frame, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
     //drawContours(frame, contours, -1, 255, 2, 8);
     if(contours.size() <= 0 || contours[0].size() < 5)
     {
@@ -94,10 +82,10 @@ void rgb_callback(const sensor_msgs::ImageConstPtr &msg )
         return ;
     }
     cv::Rect box;
-    box = boundingRect(contours[0]);//轮廓外接矩
+    box = boundingRect(contours[0]);
     
     curpoint.x = box.x + box.width / 2;
-    curpoint.y = box.y + box.height / 2;//中心点坐标,输出接你们的串口模块
+    curpoint.y = box.y + box.height / 2;
     cv::circle(pic, curpoint, 2, cv::Scalar(90, 243, 39), -1);
     cv::imshow("RGB_image",pic);
     bObsOK = 1;
@@ -105,21 +93,21 @@ void rgb_callback(const sensor_msgs::ImageConstPtr &msg )
 
 void points_callback(const sensor_msgs::PointCloud2ConstPtr &msg)
 {
-    //接收点云
+
     PointCloud::Ptr cloudrcv(new PointCloud);
     pcl::fromROSMsg(*msg, *cloudrcv);
     PointT pttmp;
     int ptwidth = cloudrcv->width;
-    //要判断是否检测到了小车
+
     if(bObsOK && curpoint.x > 0 && curpoint.y > 0)
     {
         bObsOK = 0;
-        //经测试，行优先存储。
-        pttmp = cloudrcv->points[curpoint.y * ptwidth + curpoint.x]; //暂时只有一个点
+
+        pttmp = cloudrcv->points[curpoint.y * ptwidth + curpoint.x]; 
         racecarDepth::ObsPose pub_msg;
         pub_msg.header = msg->header;
         pub_msg.x.push_back(pttmp.x);
-        pub_msg.y.push_back(pttmp.z); // Kinect坐标系的Z轴是向前的
+        pub_msg.y.push_back(pttmp.z); 
         float dist = sqrt(pttmp.x * pttmp.x + pttmp.z * pttmp.z);
         pub_msg.dist.push_back(dist);
         float tmpangle = atan2(pttmp.x,pttmp.z);
@@ -129,7 +117,7 @@ void points_callback(const sensor_msgs::PointCloud2ConstPtr &msg)
     }
 }
 
-double colorfilter(cv::Mat picture)//滤颜色
+double colorfilter(cv::Mat picture)
 {
 	cv::Mat hsv;
 	cvtColor(picture, hsv, CV_BGR2HSV);
